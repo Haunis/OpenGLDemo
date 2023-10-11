@@ -1,7 +1,7 @@
 /*
  *
  * FGLRender.java
- * 
+ *
  * Created by Wuwang on 2016/9/29
  */
 package edu.wuwang.opengl.render;
@@ -20,45 +20,47 @@ import javax.microedition.khronos.opengles.GL10;
  * Description:
  */
 public class FGLRender extends Shape {
+    private static final String TAG = FGLRender.class.getSimpleName();
 
     private Shape shape;
-    private Class<? extends Shape> clazz=Cube.class;
+    private Class<? extends Shape> clazz = Cube.class;
 
     public FGLRender(View mView) {
         super(mView);
     }
 
-    public void setShape(Class<? extends Shape> shape){
-        this.clazz=shape;
+    public void setShape(Class<? extends Shape> shape) {
+        this.clazz = shape;
     }
 
+    // 代理模式，回调对应的 Render方法
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(0.5f,0.5f,0.5f,1.0f);
-        Log.e("wuwang","onSurfaceCreated");
+        GLES20.glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        Log.e(TAG, "onSurfaceCreated");
         try {
-            Constructor constructor=clazz.getDeclaredConstructor(View.class);
+            Constructor constructor = clazz.getDeclaredConstructor(View.class);
             constructor.setAccessible(true);
-            shape= (Shape) constructor.newInstance(mView);
+            shape = (Shape) constructor.newInstance(mView);
         } catch (Exception e) {
             e.printStackTrace();
-            shape=new Cube(mView);
+            shape = new Cube(mView);
         }
-        shape.onSurfaceCreated(gl,config);
+        shape.onSurfaceCreated(gl, config);
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        Log.e("wuwang","onSurfaceChanged");
-        GLES20.glViewport(0,0,width,height);
+        Log.e(TAG, "onSurfaceChanged");
+        GLES20.glViewport(0, 0, width, height);
 
         shape.onSurfaceChanged(gl, width, height);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        Log.e("wuwang","onDrawFrame");
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT|GLES20.GL_DEPTH_BUFFER_BIT);
+        Log.e(TAG, "onDrawFrame");
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
         shape.onDrawFrame(gl);
     }
 

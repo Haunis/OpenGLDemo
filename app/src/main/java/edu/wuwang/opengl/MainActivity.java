@@ -34,6 +34,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("MainActivity");
         setContentView(R.layout.activity_main);
         mList= (RecyclerView)findViewById(R.id.mList);
         mList.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
